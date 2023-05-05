@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
+    <title>Users List - Todo App</title>
+</head>
+
+<body>
+
+<header>
+    <!--/*/ <th:block th:include="fragments/header :: header('users')"></th:block> /*/-->
+</header>
+
+<main class="container">
+    <div class="card mb-3">
+
+        <h3 class="card-header">Users list</h3>
+
+        <div class="card card-body">
+            <table class="table table-hover text-left">
+
+                <thead class="table-info">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Shared tasks</th>
+
+                    <th colspan="4">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user:${users}">
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.email}"></td>
+
+                    <td th:if="${user.tasks.size()!=0}">
+                        <div th:each="t : ${user.tasks}"
+                             th:text="${t.completed} ? ${t.name} : ${t.name}"
+                             th:style="${t.completed} ? 'text-decoration: line-through'"
+                        ></div>
+                    </td>
+                    <td th:unless="${user.tasks.size()!=0}">no task</td>
+
+                    <td><a th:href="@{'/user/assignTasks/'+${user.email}}"
+                           class="btn btn-primary btn-sm">Share task</a></td>
+<!--                     <td><span data-toggle="tooltip" data-placement="right" -->
+<!--                               title="User deletion is currently inactive"> -->
+<!--                         <a th:href="${'/user/delete/' + user.email}" -->
+<!--                            class="btn btn-outline-danger btn-sm disabled">Delete user</a> -->
+<!--                     </span></td> -->
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer class="footer">
+    <!--/*/ <th:block th:include="fragments/footer :: footer"></th:block> /*/-->
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
+    <title>User Profile - Todo App</title>
+</head>
+
+<body>
+
+<header>
+    <!--/*/ <th:block th:include="fragments/header :: header('profile')"></th:block> /*/-->
+</header>
+
+<main class="container">
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3>
+                <span>Tasks list for </span>
+                <span class="text text-success" th:text="${user.name}"></span>
+                <span th:text="' ('+${user.email}+')'"></span>
+            </h3>
+        </div>
+        <div class="card card-body">
+            <table class="my-tab table table-hover text-left">
+
+                <thead class="table-success">
+                <tr>
+                    <th>Task name</th>
+                    <th>Description</th>
+                    <th>Start date</th>
+                    <th>End date</th>
+                    <th>Completed</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="i : ${#numbers.sequence(tasks.size() - 1, 0, -1)}" th:with="t=${tasks[i]}">
+                    <td th:text="${t.name}"></td>
+                    <td th:text="${t.description}"></td>
+
+                    <td th:text="${#temporals.format(t.startDate, 'dd-MM-yyyy')}"></td>
+                    <td th:text="${#temporals.format(t.endDate, 'dd-MM-yyyy')}"></td>
+
+                    <td th:id="row+${t.id}">
+                        <a th:href="${t.completed} ? ${'/task/markUndone/' + t.id} : ${'/task/markDone/' + t.id}"
+                           th:classappend="${t.completed} ? 'text-success' : 'text-danger'"
+                           th:text="${t.completed} ? 'completed' : 'in progress'"></a>
+                    </td>
+                </tr>
+
+                <tr th:if="${tasks.size()==0}">
+                    <td colspan="5" th:text="${'There are no tasks assigned to '+ user.name}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer class="footer">
+    <!--/*/ <th:block th:include="fragments/footer :: footer"></th:block> /*/-->
+</footer>
+
+</body>
+</html>

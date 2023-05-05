@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
+    <title>Assign Tasks - Todo App</title>
+</head>
+
+<body>
+
+<header>
+    <!--/*/ <th:block th:include="fragments/header :: header('users')"></th:block> /*/-->
+</header>
+
+<main class="container">
+    <div class="card mb-3">
+        <h3 class="card-header">
+            <span>Assign tasks to </span>
+            <span class="text text-success" th:text="${user.name}"></span>
+            <span th:text="' ('+${user.email}+')'"></span>
+        </h3>
+        <div class="card-body">
+            <div class="row">
+
+                <div class="col">
+                    <div class="card">
+                        <h4 class="card-header">
+                            <span>Tasks actually assigned to </span>
+                            <span class="text text-success" th:text="${user.name}"></span>
+                        </h4>
+                        <table class="my-tab table table-hover text-left">
+
+                            <thead class="table-success">
+                            <tr>
+                                <th>Task name</th>
+                                <th>Start date</th>
+                                <th>End date</th>
+                                <th>Completed</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr th:each="ut:${userTasks}">
+
+                                <td th:text="${ut.name}"></td>
+
+                                <td th:text="${#temporals.format(ut.startDate, 'dd-MM-yyyy')}"></td>
+                                <td th:text="${#temporals.format(ut.endDate, 'dd-MM-yyyy')}"></td>
+
+                                <td th:text="${ut.completed} ? 'completed' : 'in progress'"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card">
+                        <h4 class="card-header">Free tasks, available for assignment</h4>
+
+                        <table class="my-tab table table-hover text-left">
+
+                            <thead class="table-secondary">
+                            <tr>
+                                <th>Task name</th>
+                                <th>Start date</th>
+                                <th>End date</th>
+                                <th>Assign task</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr th:each="ft:${freeTasks}" th:unless="${freeTasks.size()==0}">
+                                <td th:text="${ft.name}"></td>
+
+                                <td th:text="${#temporals.format(ft.startDate, 'dd-MM-yyyy')}"></td>
+                                <td th:text="${#temporals.format(ft.endDate, 'dd-MM-yyyy')}"></td>
+
+                                <td><a th:href="@{'/user/assign/'+${user.email}+'/'+ ${ft.id}}"
+                                       class="btn btn-info btn-sm">Assign this task</a>
+                                </td>
+                            </tr>
+                            <tr th:if="${freeTasks.size()==0}">
+                                <td colspan="5">There are no tasks to assign</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="footer">
+    <!--/*/ <th:block th:include="fragments/footer :: footer"></th:block> /*/-->
+</footer>
+
+</body>
+</html>

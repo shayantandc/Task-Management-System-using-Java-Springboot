@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
+    <title>Choose User - Todo App</title>
+</head>
+
+<body>
+
+<header>
+    <!--/*/ <th:block th:include="fragments/header :: header('tasks')"></th:block> /*/-->
+</header>
+
+<main class="container">
+    <div class="card mb-3">
+
+        <h3 class="card-header">
+            <span>Choose  owner for task: </span>
+            <span class="text text-success" th:text="${task.name}"></span>
+        </h3>
+
+        <div class="card card-body">
+            <table class="table table-hover text-left">
+
+                <thead class="table-info">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th class="text-center">Tasks completed</th>
+                    <th class="text-center">Tasks in progress</th>
+                    <th>Tasks in progress (details)</th>
+                    <th>Choose owner</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user:${users}" >
+
+
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.email}"></td>
+
+                    <td class="text-center" th:if="${user.tasks.size()!=0}">
+                        <ul class="my-replace-by-number pl-0">
+                            <li th:each="t : ${user.tasks}" th:if="${t.completed}">
+                                <span th:text="${t.name}"></span>
+                            </li>
+                        </ul>
+                    </td>
+                    <td class="text-center" th:unless="${user.tasks.size()!=0}">0</td>
+
+                    <td class="text-center" th:if="${user.tasks.size()!=0}">
+                        <ul class="my-replace-by-number pl-0">
+                            <li th:each="t : ${user.tasks}" th:if="${!t.completed}">
+                                <span th:text="${t.name}"></span>
+                            </li>
+                        </ul>
+                    </td>
+                    <td class="text-center" th:unless="${user.tasks.size()!=0}">0</td>
+
+                    <td th:if="${user.tasks.size()!=0}">
+                        <ul class=" list-unstyled pl-0">
+                            <li th:each="t : ${user.tasks}" th:if="${!t.completed}">
+                                <span th:text="${t.name}"></span>
+                            </li>
+                        </ul>
+                    </td>
+                    <td th:unless="${user.tasks.size()!=0}"></td>
+
+                    <td class="text-center"><a th:href="@{'/task/assign/'+${user.email}+'/'+${task.id}}"
+                                               class="btn btn-primary btn-sm">Choose</a></td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer class="footer">
+    <!--/*/ <th:block th:include="fragments/footer :: footer"></th:block> /*/-->
+</footer>
+
+<!--replacing list of items by number (list length)-->
+<script src="js/main.js"></script>
+
+</body>
+</html>
